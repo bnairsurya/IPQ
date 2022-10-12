@@ -1,0 +1,43 @@
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+server:
+  port: 3146
+  forward-headers-strategy: native
+  servlet:
+    context-path: /ipq
+    session:
+      tracking-modes: cookie
+spring:
+  application:
+    name: ${DEFAULT_APP_NAME:flow}
+    log:
+      dir: ${APP_LOG_DIR:/tmp/log/ipq}
+  # (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    name: postgres-datasource
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/ras}?reWriteBatchedInserts=true
+    username: ${POSTGRES_USER:ras}
+    password: ${POSTGRES_PASS:12345}
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimumIdle: 0
+      maximum-pool-size: 5
+      max-lifetime: 500000
+      idleTimeout: 120000
+      auto-commit: false
+  jooq:
+    sql-dialect: postgres
+  batch:
+    job:
+      enabled: true
+    jdbc:
+      initialize-schema: always
+app:
+  batch:
+    myJob:
+      chunkSize: 10
+      partition: 5
+      threads: 4
